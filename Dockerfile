@@ -5,6 +5,7 @@ ARG RUNNER_VERSION=2.280.3
 ARG DOCKER_CHANNEL=stable
 ARG DOCKER_VERSION=20.10.8
 ARG DUMB_INIT_VERSION=1.2.5
+ARG ARCH=x86_64
 
 RUN test -n "$TARGETPLATFORM" || (echo "TARGETPLATFORM must be set" && false)
 
@@ -69,29 +70,8 @@ RUN set -vx; \
 ENV RUNNER_ASSETS_DIR=/runnertmp
 ENV HOME=/home/runner
 
-# Uncomment the below COPY to use your own custom build of actions-runner.
-#
-# To build a custom runner:
-# - Clone the actions/runner repo `git clone git@github.com:actions/runner.git $repo`
-# - Run `cd $repo/src`
-# - Run `./dev.sh layout Release linux-x64`
-# - Run `./dev.sh package Release linux-x64`
-# - Run cp ../_package/actions-runner-linux-x64-2.280.3.tar.gz ../../actions-runner-controller/runner/
-#   - Beware that `2.280.3` might change across versions
-#
-# See https://github.com/actions/runner/blob/main/.github/workflows/release.yml for more informatino on how you can use dev.sh
-#
-# If you're willing to uncomment the following line, you'd also need to comment-out the
-#   && curl -L -o runner.tar.gz https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${ARCH}-${RUNNER_VERSION}.tar.gz \
-# line in the next `RUN` command in this Dockerfile, to avoid overwiding this runner.tar.gz with a remote one.
+RUN pip3 install pyyaml kubernetes
 
-# COPY actions-runner-linux-x64-2.280.3.tar.gz /runnertmp/runner.tar.gz
-
-# Runner download supports amd64 as x64. Externalstmp is needed for making mount points work inside DinD.
-#
-# libyaml-dev is required for ruby/setup-ruby action.
-# It is installed after installdependencies.sh and before removing /var/lib/apt/lists
-# to avoid rerunning apt-update on its own.
 RUN export ARCH=$(echo ${TARGETPLATFORM} | cut -d / -f2) \
     && if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "x86_64" ] || [ "$ARCH" = "i386" ]; then export ARCH=x64 ; fi \
     && mkdir -p "$RUNNER_ASSETS_DIR" \
