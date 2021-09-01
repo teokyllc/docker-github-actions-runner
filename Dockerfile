@@ -122,7 +122,7 @@ ENV PATH="${PATH}:${HOME}/.local/bin"
 ENV ImageOS=ubuntu20
 
 # No group definition, as that makes it harder to run docker.
-USER runner
+#USER runner
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["startup.sh"]
