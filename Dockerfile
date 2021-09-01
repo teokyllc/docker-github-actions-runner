@@ -112,12 +112,13 @@ RUN mkdir /opt/hostedtoolcache \
 
 COPY entrypoint.sh /
 COPY --chown=runner:docker patched $RUNNER_ASSETS_DIR/patched
+RUN chmod +x /entrypoint.sh
 
 # Add the Python "User Script Directory" to the PATH
 ENV PATH="${PATH}:${HOME}/.local/bin"
 ENV ImageOS=ubuntu20
 
-#USER runner
+USER runner
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["/entrypoint.sh"]
