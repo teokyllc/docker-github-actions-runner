@@ -1,5 +1,9 @@
 name: Docker Image CI
-on: [push]
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'Dockerfile'
     
 env:
   DOCKER_USER: johndvs
