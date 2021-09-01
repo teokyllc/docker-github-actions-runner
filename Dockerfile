@@ -74,6 +74,8 @@ RUN export ARCH=$(echo ${TARGETPLATFORM} | cut -d / -f2) \
 	dockerd --version; \
 	docker --version
 
+RUN pip3 install pyyaml kubernetes
+
 ENV RUNNER_ASSETS_DIR=/runnertmp
 ENV HOME=/home/runner
 
