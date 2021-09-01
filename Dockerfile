@@ -117,7 +117,7 @@ COPY --chown=runner:docker patched $RUNNER_ASSETS_DIR/patched
 ENV PATH="${PATH}:${HOME}/.local/bin"
 ENV ImageOS=ubuntu20
 
-USER runner
+#USER runner
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["/entrypoint.sh"]
