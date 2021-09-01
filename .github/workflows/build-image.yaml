@@ -1,1 +1,27 @@
-
+name: Docker Image CI
+on: [push]
+    
+env:
+  ARTIFACTORY_USER: ultron-readme-app
+  
+jobs:
+  build:
+      
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Build and Push Docker image
+        run: |
+          # Log into docker-remote repo
+          echo ${{secrets.ARTIFACTORY_SA_TOKEN}} | docker login --username=$ARTIFACTORY_USER \
+            --password-stdin \
+            humana-docker-remote.jfrog.io
+          docker build . --file Dockerfile --tag humana-ultron-readme-app.jfrog.io/readme-app:1.0
+          #
+          # Log into terraform-agents repo
+          echo ${{secrets.ARTIFACTORY_SA_TOKEN}} | docker login --username=$ARTIFACTORY_USER \
+            --password-stdin \
+            humana-ultron-readme-app.jfrog.io
+          docker push humana-ultron-readme-app.jfrog.io/readme-app:1.0
