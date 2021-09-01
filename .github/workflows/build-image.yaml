@@ -2,26 +2,30 @@ name: Docker Image CI
 on: [push]
     
 env:
-  ARTIFACTORY_USER: ultron-readme-app
+  DOCKER_USER: johndvs
   
 jobs:
   build:
-      
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
         
-      - name: Build and Push Docker image
-        run: |
-          # Log into docker-remote repo
-          echo ${{secrets.ARTIFACTORY_SA_TOKEN}} | docker login --username=$ARTIFACTORY_USER \
-            --password-stdin \
-            humana-docker-remote.jfrog.io
-          docker build . --file Dockerfile --tag humana-ultron-readme-app.jfrog.io/readme-app:1.0
-          #
-          # Log into terraform-agents repo
-          echo ${{secrets.ARTIFACTORY_SA_TOKEN}} | docker login --username=$ARTIFACTORY_USER \
-            --password-stdin \
-            humana-ultron-readme-app.jfrog.io
-          docker push humana-ultron-readme-app.jfrog.io/readme-app:1.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: $DOCKER_USER
+          password: ${{ secrets.DOCKER_PASSWD }}
+          
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: johndvs/actions-custom-image:latest
+
