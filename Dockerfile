@@ -79,23 +79,23 @@ ENV HOME=/home/runner
 
 RUN pip3 install pyyaml kubernetes
 
-RUN curl -LO https://dl.k8s.io/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl \
+RUN curl -LO https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
     && chmod +x kubectl \
     && mv kubectl /usr/bin
 
-RUN curl -LO https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz \
-    && tar -xzvf helm-v$HELM_VERSION-linux-amd64.tar.gz \
+RUN curl -LO https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+    && tar -xzvf helm-v${HELM_VERSION}-linux-amd64.tar.gz \
     && chmod +x linux-amd64/helm \
     && mv linux-amd64/helm /usr/bin \
-    && rm helm-v$HELM_VERSION-linux-amd64.tar.gz \
+    && rm helm-v${HELM_VERSION}-linux-amd64.tar.gz \
     && rm -rf linux-amd64
     
-RUN curl -LO https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION_linux_amd64.zip \
-    && unzip terraform_$TERRAFORM_VERSION_linux_amd64.zip \
+RUN curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     && mv terraform /usr/bin
     
-RUN curl -LO https://releases.hashicorp.com/vault/$VAULT_VERSION/vault_$VAULT_VERSION_linux_amd64.zip \
-    && unzip vault_$VAULT_VERSION_linux_amd64.zip \
+RUN curl -LO https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip \
+    && unzip vault_${VAULT_VERSION}_linux_amd64.zip \
     && mv vault /usr/bin    
 
 RUN export ARCH=$(echo ${TARGETPLATFORM} | cut -d / -f2) \
