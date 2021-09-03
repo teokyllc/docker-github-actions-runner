@@ -5,6 +5,10 @@ ARG RUNNER_VERSION=2.280.3
 ARG DOCKER_CHANNEL=stable
 ARG DOCKER_VERSION=20.10.8
 ARG DUMB_INIT_VERSION=1.2.5
+ARG KUBECTL_VERSION=1.22.0
+ARG HELM_VERSION=3.6.3
+ARG TERRAFORM_VERSION=1.0.6
+ARG VAULT_VERSION=1.8.2
 ARG ARCH=x86_64
 
 RUN test -n "$TARGETPLATFORM" || (echo "TARGETPLATFORM must be set" && false)
@@ -74,6 +78,25 @@ ENV RUNNER_ASSETS_DIR=/runnertmp
 ENV HOME=/home/runner
 
 RUN pip3 install pyyaml kubernetes
+
+RUN curl -LO https://dl.k8s.io/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl \
+    && chmod +x kubectl \
+    && mv kubectl /usr/bin
+
+RUN curl -LO https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz \
+    && tar -xzvf helm-v$HELM_VERSION-linux-amd64.tar.gz \
+    && chmod +x linux-amd64/helm \
+    && mv linux-amd64/helm /usr/bin \
+    && rm helm-v$HELM_VERSION-linux-amd64.tar.gz \
+    && rm -rf linux-amd64
+    
+RUN curl -LO https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION_linux_amd64.zip \
+    && unzip terraform_$TERRAFORM_VERSION_linux_amd64.zip \
+    && mv terraform /usr/bin
+    
+RUN curl -LO https://releases.hashicorp.com/vault/$VAULT_VERSION/vault_$VAULT_VERSION_linux_amd64.zip \
+    && unzip vault_$VAULT_VERSION_linux_amd64.zip \
+    && mv vault /usr/bin    
 
 RUN export ARCH=$(echo ${TARGETPLATFORM} | cut -d / -f2) \
     && if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "x86_64" ] || [ "$ARCH" = "i386" ]; then export ARCH=x64 ; fi \
