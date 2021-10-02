@@ -53,8 +53,8 @@ jobs:
       - name: Build and Push Versioned Tags
         uses: docker/build-push-action@v2
         with:
-          context: ./runner
-          file: ./runner/${{ matrix.dockerfile }}
+          context: .
+          file: ${{ matrix.dockerfile }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           build-args: |
@@ -94,8 +94,8 @@ jobs:
       - name: Build and Push Latest Tag
         uses: docker/build-push-action@v2
         with:
-          context: ./runner
-          file: ./runner/${{ matrix.dockerfile }}
+          context: .
+          file: ${{ matrix.dockerfile }}
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
