@@ -23,7 +23,6 @@ RUN apt update -y \
     curl \
     ca-certificates \
     dnsutils \
-    ftp \
     git \
     iproute2 \
     iputils-ping \
