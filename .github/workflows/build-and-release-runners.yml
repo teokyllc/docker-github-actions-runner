@@ -9,7 +9,7 @@ on:
       - 'Dockerfile.ubuntu.20.04'
       - 'startup.sh'
       - 'entrypoint.sh'
-      - .github/workflows/build-and-release-runners.yml
+      - .github/workflows/*.yml
 
 env:
   RUNNER_VERSION: 2.288.1
@@ -73,7 +73,7 @@ jobs:
             ${{ env.DOCKER_REGISTRY }}/${{ matrix.name }}:v${{ env.RUNNER_VERSION }}-ubuntu-${{ matrix.os-version }}-${{ steps.vars.outputs.sha_short }}
   latest-tags:
     if: ${{ github.event_name == 'push' || github.event_name == 'release' }}
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Build ${{ matrix.name }}-latest
     strategy:
       matrix:
