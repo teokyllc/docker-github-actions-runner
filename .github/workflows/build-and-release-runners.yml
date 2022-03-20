@@ -14,8 +14,8 @@ on:
 env:
   RUNNER_VERSION: 2.288.1
   DOCKER_VERSION: 20.10.13
-  DOCKER_REGISTRY: teokyllc.azurecr.io
-  DOCKER_REGISTRY_USERNAME: teokyllc
+  DOCKER_REGISTRY: teokyllcsharedservices.azurecr.io
+  DOCKER_REGISTRY_USERNAME: TEOKYLLCSharedServices
 
 jobs:
   build:
